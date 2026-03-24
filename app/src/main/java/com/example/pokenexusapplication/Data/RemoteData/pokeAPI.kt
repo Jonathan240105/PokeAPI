@@ -1,4 +1,2 @@
-package com.example.pokenexusapplication.Data.RemoteData
+package com.example.pokenexusapplication.Data.RemoteData 
 
-object pokeAPI {
-}
