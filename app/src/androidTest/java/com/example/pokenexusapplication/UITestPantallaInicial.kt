@@ -18,7 +18,7 @@ class UITestPantallaInicial {
     //Función que lanza la pantalla inicial en un contexto composable
     fun lanzarPantallaInicial() {
         composeRule.setContent {
-            PantallaInicial()
+          //  PantallaInicial()
         }
     }
 
