@@ -34,6 +34,8 @@ import com.example.pokenexusapplication.Views.ViewModels.ViewModelInicial
 fun PantallaInicial(myViewModel: ViewModelInicial, navegarAPrincipal: () -> Unit) {
 
     val model by myViewModel.model.collectAsState()
+
+    //Una vez los datos se hayan cargado, el estado de la pantalla será un succes true, asi que una vez este en true se navegará automáticamente
     LaunchedEffect(model.succes) {
         if (model.succes) {
             navegarAPrincipal()
