@@ -26,13 +26,30 @@ class UITestPantallaInicial {
     @Test
     fun `Comprobar_que_el_titulo_existe`() {
         lanzarPantallaInicial()
+        composeRule.waitForIdle()
         composeRule.onNodeWithTag("tituloInicial").assertExists()
     }
 
-    //Test que comprueba que el texto del titulo es lo qe se espera
+    //Test que comprueba que el texto del titulo muestra lo que se espera
     @Test
     fun `Comprobar_que_el_texto_del_titulo_es_lo_esperado`() {
+        composeRule.waitForIdle()
         lanzarPantallaInicial()
         composeRule.onNodeWithTag("tituloInicial").assertTextEquals("Poke-Nexus")
+    }
+
+    @Test
+    fun `Comprobar_que_el_texto_inferior_existe`(){
+        composeRule.waitForIdle()
+        lanzarPantallaInicial()
+        composeRule.onNodeWithTag("textoCarga").assertExists()
+    }
+
+    //Test que comprueba que el texto de carga inferior muestra lo que se espera
+    @Test
+    fun `Comprobar_que_el_texto_inferior_muestra_lo_esperado`(){
+        composeRule.waitForIdle()
+        lanzarPantallaInicial()
+        composeRule.onNodeWithTag("textoCarga").assertTextEquals("Cargando...")
     }
 }

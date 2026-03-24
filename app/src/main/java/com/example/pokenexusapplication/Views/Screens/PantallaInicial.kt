@@ -2,6 +2,7 @@ package com.example.pokenexusapplication.Views.Screens
 
 import android.graphics.Paint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,27 +28,36 @@ import coil.compose.AsyncImage
 
 @Composable
 fun PantallaInicial() {
-    AsyncImage(
-        "https://i.pinimg.com/1200x/61/57/2e/61572e00849123bd306dbd59c541f841.jpg",
-        "",
-        modifier = Modifier.fillMaxSize(),
-        contentScale = ContentScale.Crop
-    )
-    Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(Modifier.height(50.dp))
+    Box(Modifier.fillMaxSize()) {
+        AsyncImage(
+            "https://i.pinimg.com/1200x/61/57/2e/61572e00849123bd306dbd59c541f841.jpg",
+            "",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
         Row(
             Modifier
                 .fillMaxWidth()
+                .padding(top = 50.dp)
                 .padding(horizontal = 50.dp)
                 .background(Color.White), horizontalArrangement = Arrangement.Center
         ) {
             Text(
                 "Poke-Nexus",
                 textAlign = TextAlign.Center,
-                fontSize = 30.sp,
+                fontSize = 45.sp,
                 color = Color.Black,
                 modifier = Modifier.testTag("tituloInicial")
             )
+        }
+        Row(
+            Modifier
+                .align(Alignment.BottomEnd)
+                .navigationBarsPadding()
+                .background(Color.Black)
+                .padding(bottom = 30.dp, end = 30.dp)
+        ) {
+            Text("Cargando...", color = Color.White, fontSize = 35.sp, modifier = Modifier.testTag("textoCarga"))
 
         }
     }
