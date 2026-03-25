@@ -21,13 +21,16 @@ fun Controller() {
     NavHost(navController, Rutas.PANTALLA_INICIAL) {
 
         composable(Rutas.PANTALLA_INICIAL) {
-            PantallaInicial(viewModelPrincipal, { navController.navigate(Rutas.PANTALLA_PRINCIPAL) })
+            PantallaInicial(
+                viewModelPrincipal,
+                { navController.navigate(Rutas.PANTALLA_PRINCIPAL) })
         }
         composable(Rutas.PANTALLA_CARGA) {
             PantallaCarga()
         }
         composable(Rutas.PANTALLA_PRINCIPAL) {
-            PantallaPrincipal(viewModelPrincipal)
+            PantallaPrincipal(viewModelPrincipal,
+                { navController.navigate(Rutas.PANTALLA_DETALLADA) })
         }
         composable(Rutas.PANTALLA_DETALLADA) {
             PantallaDetallada()

@@ -1,6 +1,7 @@
 package com.example.pokenexusapplication.Views.Screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,13 +22,21 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,11 +58,19 @@ import com.example.pokenexusapplication.ui.theme.getColorPokemon
 
 
 @Composable
-fun PantallaPrincipal(myViewModel: ViewModelPrincipal) {
+fun PantallaPrincipal(myViewModel: ViewModelPrincipal, navegarADetalle: () -> Unit) {
 
     val model by myViewModel.model.collectAsState()
     val estadoLista = rememberLazyGridState()
+    var nombreBuscado by remember { mutableStateOf("") }
 
+    val listaFiltrada = if (nombreBuscado.isEmpty()) {
+        model.listaPokemons
+    } else {
+        model.listaPokemons.filter { pokemon ->
+            pokemon.nombre.contains(nombreBuscado, ignoreCase = true)
+        }
+    }
     LaunchedEffect(estadoLista.canScrollForward) {
         if (!estadoLista.canScrollForward && !model.isLoading) {
             myViewModel.cargarSiguientePagina()
@@ -63,6 +81,8 @@ fun PantallaPrincipal(myViewModel: ViewModelPrincipal) {
         Modifier
             .fillMaxSize()
             .background(FondoPantalla)
+            .navigationBarsPadding()
+
     ) {
         tituloListado()
         Spacer(
@@ -75,13 +95,14 @@ fun PantallaPrincipal(myViewModel: ViewModelPrincipal) {
             columns = GridCells.Fixed(2),
             Modifier
                 .fillMaxWidth()
+                .weight(1f)
                 .padding(5.dp),
             state = estadoLista
         ) {
-            items(model.listaPokemons) {
-                EstructuraPokemon(it)
+            items(listaFiltrada) {
+                EstructuraPokemon(it, { navegarADetalle() })
             }
-            if (model.listaPokemons.size < 1350) {
+            if (model.listaPokemons.size < 1350 && nombreBuscado.isEmpty()) {
                 item(span = { GridItemSpan(2) }) {
                     Text(
                         "Buscando más Pokémon...",
@@ -93,12 +114,13 @@ fun PantallaPrincipal(myViewModel: ViewModelPrincipal) {
                 }
             }
         }
+        buscador(nombreBuscado) { nombreBuscado = it }
     }
 }
 
 
 @Composable
-fun EstructuraPokemon(pokemon: Pokemon) {
+fun EstructuraPokemon(pokemon: Pokemon, navegarAPokemon: () -> Unit) {
 
     val tipoPrincipal = pokemon.tipos?.getOrNull(0)?.tipo?.nombre ?: "Desconocido"
     val colorPokemon = getColorPokemon(tipoPrincipal)
@@ -112,6 +134,7 @@ fun EstructuraPokemon(pokemon: Pokemon) {
     ) {
         Column(
             modifier = Modifier
+                .clickable(onClick = navegarAPokemon)
                 .background(
 //                    brush = Brush.verticalGradient(
 //                        colors = listOf(
@@ -198,5 +221,39 @@ fun tituloListado() {
             letterSpacing = 5.sp,
             textAlign = TextAlign.Center
         )
+    }
+}
+
+@Composable
+fun buscador(valor: String, cambiarTextField: (String) -> Unit) {
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .background(PokedexRojo)
+            .padding(bottom = 20.dp, top = 10.dp)
+    ) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 90.dp)
+        ) {
+            OutlinedTextField(
+                valor,
+                cambiarTextField,
+                trailingIcon = { Icon(Icons.Default.Search, "") },
+                singleLine = true,
+                label = { Text("Buscar Pokemon") },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    focusedContainerColor = Color(0xFF2B2B2B),
+                    unfocusedContainerColor = Color(0xFF2B2B2B),
+                    focusedBorderColor = Color.White,
+                    unfocusedBorderColor = Color.Gray,
+                    focusedLabelColor = Color.White,
+                    disabledLabelColor = Color.White
+                )
+            )
+        }
     }
 }
