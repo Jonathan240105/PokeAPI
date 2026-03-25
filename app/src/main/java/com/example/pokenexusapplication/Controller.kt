@@ -1,7 +1,7 @@
 package com.example.pokenexusapplication
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -11,23 +11,26 @@ import com.example.pokenexusapplication.Views.Screens.PantallaEvoluciones
 import com.example.pokenexusapplication.Views.Screens.PantallaInicial
 import com.example.pokenexusapplication.Views.Screens.PantallaMovimientos
 import com.example.pokenexusapplication.Views.Screens.PantallaPrincipal
-import com.example.pokenexusapplication.Views.ViewModels.ViewModelInicial
+import com.example.pokenexusapplication.Views.ViewModels.ViewModelPrincipal
 
 @Composable
 fun Controller() {
     val navController = rememberNavController()
 
-    val viewModelInicial: ViewModelInicial = viewModel()
+    val viewModelPrincipal: ViewModelPrincipal = hiltViewModel()
     NavHost(navController, Rutas.PANTALLA_INICIAL) {
 
         composable(Rutas.PANTALLA_INICIAL) {
-            PantallaInicial(viewModelInicial, { navController.navigate(Rutas.PANTALLA_PRINCIPAL) })
+            PantallaInicial(
+                viewModelPrincipal,
+                { navController.navigate(Rutas.PANTALLA_PRINCIPAL) })
         }
         composable(Rutas.PANTALLA_CARGA) {
             PantallaCarga()
         }
         composable(Rutas.PANTALLA_PRINCIPAL) {
-            PantallaPrincipal()
+            PantallaPrincipal(viewModelPrincipal,
+                { navController.navigate(Rutas.PANTALLA_DETALLADA) })
         }
         composable(Rutas.PANTALLA_DETALLADA) {
             PantallaDetallada()
