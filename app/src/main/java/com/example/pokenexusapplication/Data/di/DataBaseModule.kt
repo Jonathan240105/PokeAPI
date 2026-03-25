@@ -3,6 +3,8 @@ package com.example.pokenexusapplication.Data.di
 import android.content.Context
 import androidx.room.Room
 import com.example.pokenexusapplication.Data.LocalData.AppDataBase
+import com.example.pokenexusapplication.Data.LocalData.PokemonCompactoData.PokemonCompactoDao
+import com.example.pokenexusapplication.Data.LocalData.PokemonData.PokemonDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,5 +24,14 @@ object DataBaseModule {
             AppDataBase::class.java,
             "Base de datos de pokemon"
         ).fallbackToDestructiveMigration().build()
+    }
+
+    @Provides
+    fun providePokemonCompactoDao(db: AppDataBase): PokemonCompactoDao {
+        return db.pokemonCompactoDao()
+    }
+    @Provides
+    fun providePokemonDao(db: AppDataBase): PokemonDao {
+        return db.pokemonDao()
     }
 }
