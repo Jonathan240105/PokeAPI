@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.ExtraBold
@@ -214,7 +215,8 @@ fun tituloListado() {
             "POKÉDEX",
             modifier = Modifier
                 .fillMaxSize()
-                .wrapContentHeight(Alignment.CenterVertically),
+                .wrapContentHeight(Alignment.CenterVertically)
+                .testTag("tituloPrincipal"),
             fontSize = 25.sp,
             fontWeight = FontWeight.Black,
             color = Color(0xFF51ADFB),
@@ -240,6 +242,7 @@ fun buscador(valor: String, cambiarTextField: (String) -> Unit) {
             OutlinedTextField(
                 valor,
                 cambiarTextField,
+                Modifier.testTag("textFieldBusqueda"),
                 trailingIcon = { Icon(Icons.Default.Search, "") },
                 singleLine = true,
                 label = { Text("Buscar Pokemon") },

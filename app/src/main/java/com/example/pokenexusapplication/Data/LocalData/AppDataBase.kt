@@ -10,8 +10,8 @@ import com.example.pokenexusapplication.Data.LocalData.PokemonData.PokemonEntity
 import com.example.pokenexusapplication.Data.RemoteData.Responses.PokemonConverters
 
 @Database(
-    entities = [Prueba::class, PokemonEntity::class, PokemonCompactoEntity::class],
-    version = 3,
+    entities = [ PokemonEntity::class, PokemonCompactoEntity::class],
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(PokemonConverters::class)
