@@ -1,7 +1,6 @@
 package com.example.pokenexusapplication
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.pokenexusapplication.Views.ViewModels.ViewModelInicial
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi

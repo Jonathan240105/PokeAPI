@@ -1,16 +1,11 @@
 package com.example.pokenexusapplication.Views.Screens
 
-import android.graphics.Paint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -24,22 +19,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.pokenexusapplication.Views.ViewModels.ViewModelInicial
+import com.example.pokenexusapplication.Views.ViewModels.ViewModelPrincipal
 
 @Composable
-fun PantallaInicial(myViewModel: ViewModelInicial, navegarAPrincipal: () -> Unit) {
+fun PantallaInicial(myViewModel: ViewModelPrincipal, navegarAPrincipal: () -> Unit) {
 
     val model by myViewModel.model.collectAsState()
 
     //Una vez los datos se hayan cargado, el estado de la pantalla será un succes true, asi que una vez este en true se navegará automáticamente
+
+    LaunchedEffect(Unit) {
+        myViewModel.listarPokemons()
+        myViewModel.cargarSiguientePagina()
+    }
     LaunchedEffect(model.succes) {
         if (model.succes) {
             navegarAPrincipal()
-            myViewModel.resetearEstadoInicial()
         }
     }
     Box(Modifier.fillMaxSize()) {

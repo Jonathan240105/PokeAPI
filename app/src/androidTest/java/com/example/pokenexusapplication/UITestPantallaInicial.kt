@@ -4,9 +4,7 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.pokenexusapplication.Domain.ModelInicial
 import com.example.pokenexusapplication.Views.Screens.PantallaInicial
-import com.example.pokenexusapplication.Views.ViewModels.ViewModelInicial
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

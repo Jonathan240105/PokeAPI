@@ -1,6 +1,5 @@
 package com.example.pokenexusapplication
 
-import com.example.pokenexusapplication.Domain.ModelInicial
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
