@@ -5,6 +5,7 @@ import com.example.pokenexusapplication.Data.RemoteData.Responses.Imagen
 import com.example.pokenexusapplication.Data.RemoteData.Responses.PokemonConverters
 import com.example.pokenexusapplication.Data.RemoteData.Responses.Stat
 import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
 class PokemonConverterTests {
@@ -18,7 +19,7 @@ class PokemonConverterTests {
         val json = converters.fromSprites(imagen)
         val resultado = converters.toSprites(json)
 
-        TestCase.assertEquals(imagen, resultado)
+        assertEquals(imagen, resultado)
     }
 
     @Test
@@ -28,9 +29,9 @@ class PokemonConverterTests {
         val json = converters.fromStatsList(listaStats)
         val resultado = converters.toStatsList(json)
 
-        TestCase.assertEquals(2, resultado?.size)
-        TestCase.assertEquals(45, resultado?.get(0)?.valor)
-        TestCase.assertEquals(listaStats, resultado)
+        assertEquals(2, resultado?.size)
+        assertEquals(45, resultado?.get(0)?.valor)
+        assertEquals(listaStats, resultado)
     }
 
     @Test
@@ -43,8 +44,8 @@ class PokemonConverterTests {
         val json = converters.fromPokemonTipoList(listaTipos)
         val resultado = converters.toPokemonTipoList(json)
 
-        TestCase.assertEquals(2, resultado?.size)
-        TestCase.assertEquals("electric", resultado?.get(0)?.nombre)
-        TestCase.assertEquals(listaTipos, resultado)
+        assertEquals(2, resultado?.size)
+        assertEquals("electric", resultado?.get(0)?.nombre)
+        assertEquals(listaTipos, resultado)
     }
 }

@@ -2,6 +2,7 @@ package com.example.pokenexusapplication.ModelTest
 
 import com.example.pokenexusapplication.Data.RemoteData.Responses.Imagen
 import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
 class ImagenModelTest {
@@ -11,7 +12,7 @@ class ImagenModelTest {
         val url = "url"
         val imagen = Imagen(frontDefault = url)
 
-        TestCase.assertEquals(url, imagen.frontDefault)
+        assertEquals(url, imagen.frontDefault)
     }
 
     @Test
@@ -19,6 +20,7 @@ class ImagenModelTest {
         val img = Imagen(frontDefault = "url1")
         val imgCopia = img.copy(frontDefault = "url2")
 
-        TestCase.assertEquals("url2", imgCopia.frontDefault)
+
+        assertEquals("url2", imgCopia.frontDefault)
     }
 }

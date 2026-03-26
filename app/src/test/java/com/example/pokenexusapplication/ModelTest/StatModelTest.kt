@@ -2,6 +2,7 @@ package com.example.pokenexusapplication.ModelTest
 
 import com.example.pokenexusapplication.Data.RemoteData.Responses.Stat
 import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
 class StatModelTest {
@@ -11,7 +12,7 @@ class StatModelTest {
 
         val stat = Stat(valor = valor)
 
-        TestCase.assertEquals(valor, stat.valor)
+        assertEquals(valor, stat.valor)
     }
 
     @Test
@@ -19,6 +20,6 @@ class StatModelTest {
         val stat = Stat(valor = 50)
         val statCopia = stat.copy(valor = 75)
 
-        TestCase.assertEquals(75, statCopia.valor)
+        assertEquals(75, statCopia.valor)
     }
 }

@@ -11,10 +11,10 @@ data class Especie(
 
 data class Descripcion(
     @SerializedName("flavor_text") val texto: String,
-    @SerializedName("language") val idioma: Lenguaje
+    @SerializedName("language") val idioma: Idioma
 )
 
-data class Lenguaje(
+data class Idioma(
     @SerializedName("name") val nombre: String,
     @SerializedName("url") val url: String
 )

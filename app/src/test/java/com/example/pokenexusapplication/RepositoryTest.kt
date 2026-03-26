@@ -1,5 +1,7 @@
 package com.example.pokenexusapplication
 
+import com.example.pokenexusapplication.Data.LocalData.EspecieData.EspecieDao
+import com.example.pokenexusapplication.Data.LocalData.EvolucionData.EvolucionDao
 import com.example.pokenexusapplication.Data.LocalData.PokemonCompactoData.PokemonCompactoDao
 import com.example.pokenexusapplication.Data.LocalData.PokemonCompactoData.PokemonCompactoEntity
 import com.example.pokenexusapplication.Data.LocalData.PokemonData.PokemonDao
@@ -22,7 +24,9 @@ class RepositoryTest {
     private val api = mockk<DataInterface>()
     private val pokemonDao = mockk<PokemonDao>()
     private val listDao = mockk<PokemonCompactoDao>()
-    private val repository = RepositoryImp(api, pokemonDao, listDao)
+    private val evoDao = mockk<EvolucionDao>()
+    private val especieDao = mockk<EspecieDao>()
+    private val repository = RepositoryImp(api, pokemonDao, especieDao, evoDao, listDao)
 
     @Test
     fun `Si en la base de datos no hay nada, se llama a la api y se actualizan los datos`() =
