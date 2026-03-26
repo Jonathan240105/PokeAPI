@@ -2,7 +2,6 @@ package com.example.pokenexusapplication.Views.Screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,11 +39,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.ExtraBold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -190,7 +187,7 @@ fun EstructuraPokemon(pokemon: Pokemon, navegarAPokemon: () -> Unit) {
                 )
                 Spacer(Modifier.width(15.dp))
                 Text(
-                    "HP ${pokemon.estadísticas?.getOrNull(0)?.valor?.toString() ?: "0"}",
+                    "HP ${pokemon.estadisticas?.getOrNull(0)?.valor?.toString() ?: "0"}",
                     fontSize = 14.sp,
                     fontWeight = ExtraBold,
                     color = Color.White

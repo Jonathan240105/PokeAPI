@@ -3,6 +3,8 @@ package com.example.pokenexusapplication.Data.di
 import android.content.Context
 import androidx.room.Room
 import com.example.pokenexusapplication.Data.LocalData.AppDataBase
+import com.example.pokenexusapplication.Data.LocalData.EspecieData.EspecieDao
+import com.example.pokenexusapplication.Data.LocalData.EvolucionData.EvolucionDao
 import com.example.pokenexusapplication.Data.LocalData.PokemonCompactoData.PokemonCompactoDao
 import com.example.pokenexusapplication.Data.LocalData.PokemonData.PokemonDao
 import dagger.Module
@@ -30,8 +32,19 @@ object DataBaseModule {
     fun providePokemonCompactoDao(db: AppDataBase): PokemonCompactoDao {
         return db.pokemonCompactoDao()
     }
+
     @Provides
     fun providePokemonDao(db: AppDataBase): PokemonDao {
         return db.pokemonDao()
+    }
+
+    @Provides
+    fun provideEspecieDao(db: AppDataBase): EspecieDao {
+        return db.especieDao()
+    }
+
+    @Provides
+    fun provideEvolucionDao(db: AppDataBase): EvolucionDao {
+        return db.evolucionDao()
     }
 }

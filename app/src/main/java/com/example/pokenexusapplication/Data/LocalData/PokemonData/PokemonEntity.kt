@@ -6,7 +6,9 @@ import com.example.pokenexusapplication.Data.RemoteData.Responses.Imagen
 import com.example.pokenexusapplication.Data.RemoteData.Responses.Stat
 import com.example.pokenexusapplication.Data.RemoteData.Responses.Tipo
 import com.example.pokenexusapplication.Data.RemoteData.Responses.TipoPokemon
+import com.example.pokenexusapplication.Domain.Especie
 import com.example.pokenexusapplication.Domain.Pokemon
+import com.example.pokenexusapplication.Domain.getDescripcionDeLista
 
 @Entity(tableName = "Pokemon")
 data class PokemonEntity(
@@ -16,7 +18,9 @@ data class PokemonEntity(
     val fotoUrl: Imagen? = null,
     val peso: Int = 0,
     val altura: Int = 0,
-    val estadisticas: List<Stat>? = null
+    val estadisticas: List<Stat>? = null,
+    val idEspecie: Int? = null,
+    var descripcion: String? = ""
 )
 
 data class TipoEntity(
@@ -24,17 +28,28 @@ data class TipoEntity(
     val nombre: String
 )
 
-fun PokemonToEntity(pokemon: Pokemon): PokemonEntity {
+fun PokemonToEntity(pokemon: Pokemon, especie: Especie? = null): PokemonEntity {
+
+
+    val descripcion = getDescripcionDeLista(especie?.descripcion)
+    val idEspecie = pokemon.especie?.url
+        ?.trimEnd('/')
+        ?.split("/")
+        ?.lastOrNull()
+        ?.toIntOrNull()
+
     return PokemonEntity(
         id = pokemon.id,
         nombre = pokemon.nombre,
         peso = pokemon.peso,
         altura = pokemon.altura,
         fotoUrl = pokemon.fotoUrl,
-        estadisticas = pokemon.`estadísticas`,
+        estadisticas = pokemon.estadisticas,
         tipos = pokemon.tipos?.map {
             TipoEntity(it.slot, it.tipo.nombre)
-        }
+        },
+        idEspecie = idEspecie,
+        descripcion = descripcion
     )
 }
 
@@ -45,13 +60,13 @@ fun EntityToPokemon(entity: PokemonEntity): Pokemon {
         peso = entity.peso,
         altura = entity.altura,
         fotoUrl = entity.fotoUrl,
-        estadísticas = entity.estadisticas,
+        estadisticas = entity.estadisticas,
         tipos = entity.tipos?.map {
             TipoPokemon(
                 slot = it.slot,
                 tipo = Tipo(it.nombre)
             )
-        }
+        },
     )
 }
 

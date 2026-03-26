@@ -1,6 +1,7 @@
 package com.example.pokenexusapplication.Domain
 
 import androidx.room.PrimaryKey
+import com.example.pokenexusapplication.Data.RemoteData.Responses.EspecieCompacta
 import com.example.pokenexusapplication.Data.RemoteData.Responses.Imagen
 import com.example.pokenexusapplication.Data.RemoteData.Responses.Stat
 import com.example.pokenexusapplication.Data.RemoteData.Responses.TipoPokemon
@@ -13,6 +14,7 @@ data class Pokemon(
     @SerializedName("sprites") val fotoUrl: Imagen? = null,
     @SerializedName("weight") val peso: Int = 0,
     @SerializedName("height") val altura: Int = 0,
-    @SerializedName("stats") val `estadísticas`: List<Stat>? = null
+    @SerializedName("stats") val estadisticas: List<Stat>? = null,
+    @SerializedName("species") val especie: EspecieCompacta? = null,
 
 )
