@@ -2,15 +2,22 @@ package com.example.pokenexusapplication
 
 import com.example.pokenexusapplication.Data.LocalData.EspecieData.EspecieDao
 import com.example.pokenexusapplication.Data.LocalData.EvolucionData.EvolucionDao
+import com.example.pokenexusapplication.Data.LocalData.EvolucionData.EvolucionEntity
 import com.example.pokenexusapplication.Data.LocalData.PokemonCompactoData.PokemonCompactoDao
 import com.example.pokenexusapplication.Data.LocalData.PokemonCompactoData.PokemonCompactoEntity
 import com.example.pokenexusapplication.Data.LocalData.PokemonData.PokemonDao
 import com.example.pokenexusapplication.Data.LocalData.PokemonData.PokemonEntity
 import com.example.pokenexusapplication.Data.RemoteData.DataInterface
+import com.example.pokenexusapplication.Data.RemoteData.Responses.CadenaEvolucion
+import com.example.pokenexusapplication.Data.RemoteData.Responses.Evolucion
+import com.example.pokenexusapplication.Data.RemoteData.Responses.ObjetoCompacto
 import com.example.pokenexusapplication.Data.RemoteData.Responses.PokemonCompactoList
 import com.example.pokenexusapplication.Data.Repository.RepositoryImp
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.flowOf
@@ -70,4 +77,48 @@ class RepositoryTest {
         assertEquals("pikachu", resultado[0].nombre)
         coVerify(exactly = 0) { api.pillarUnPokemon(any()) }
     }
+
+    @Test
+    fun `Comprobar que si hay evoluciones guardadas en la base de datos, que no se llame a la api`() =
+        runTest {
+            val datosLocales =
+                EvolucionEntity(
+                    id = 1,
+                    idCadena = 10,
+                    nombrePokemonBase = "Pikachu",
+                    nombrePokemonEvolucion = "Raichu"
+
+                )
+            coEvery { evoDao.getEvoluciones(any()) } returns listOf(datosLocales)
+
+            val resultado = repository.getEvolucion(10).toList()
+
+            assertEquals(1, resultado.first().size)
+            assertEquals("Pikachu", resultado.first()[0].nombrePokemonBase)
+
+            coVerify(exactly = 0) { api.getEvolucion(any()) }
+        }
+
+    @Test
+    fun `Cuando la base de datos esta vacia, la función llama a la api,guarda en la base de datos  y emitie los nuevos`() =
+        runTest {
+            val idBusqueda = 10
+
+            coEvery { evoDao.getEvoluciones(idBusqueda) } returns emptyList()
+            coEvery { evoDao.insertarEvoluciones(any()) } just Runs
+
+            val EvolucionApi = mockk<Evolucion>()
+            every { EvolucionApi.id } returns idBusqueda
+            every { EvolucionApi.cadenaDeEvolucion } returns CadenaEvolucion(
+                pokemon = ObjetoCompacto("pichu", ""),
+                evolucion = emptyList(),
+                detallesEvolucion = emptyList()
+            )
+            coEvery { api.getEvolucion(idBusqueda) } returns Response.success(EvolucionApi)
+
+            repository.getEvolucion(idBusqueda).toList()
+
+            coVerify(exactly = 1) { api.getEvolucion(idBusqueda) }
+            coVerify(exactly = 1) { evoDao.insertarEvoluciones(any()) }
+        }
 }

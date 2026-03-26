@@ -18,9 +18,9 @@ class IdiomaTest {
     @Test
     fun `Actualizar atributos en Lenguaje`() {
         val idioma = Idioma("en", "url1")
-        val copia = idioma.copy("fr")
+        val copia = idioma.copy("frances")
 
-        assertEquals("fr", copia.nombre)
+        assertEquals("frances", copia.nombre)
         assertEquals("url1", copia.url)
     }
 
@@ -29,6 +29,6 @@ class IdiomaTest {
         val l1 = Idioma("es", "url")
         val l2 = Idioma("es", "url")
 
-        assertEquals(l1,l2)
+        assertEquals(l1, l2)
     }
 }
