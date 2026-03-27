@@ -1,7 +1,6 @@
 package com.example.pokenexusapplication.ModelTest
 
 import com.example.pokenexusapplication.Domain.Pokemon
-import junit.framework.TestCase
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
