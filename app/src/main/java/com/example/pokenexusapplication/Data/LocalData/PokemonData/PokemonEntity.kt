@@ -20,7 +20,8 @@ data class PokemonEntity(
     val altura: Int = 0,
     val estadisticas: List<Stat>? = null,
     val idEspecie: Int? = null,
-    var descripcion: String? = ""
+    var descripcion: String? = "",
+    val movimientos: List<String>? = null
 )
 
 data class TipoEntity(
@@ -49,24 +50,28 @@ fun PokemonToEntity(pokemon: Pokemon, especie: Especie? = null): PokemonEntity {
             TipoEntity(it.slot, it.tipo.nombre)
         },
         idEspecie = idEspecie,
-        descripcion = descripcion
+        descripcion = descripcion,
+        movimientos = pokemon.movimientos?.map { it.nombre.nombre }
     )
 }
 
-fun EntityToPokemon(entity: PokemonEntity): Pokemon {
+fun EntityToPokemon(entity: PokemonEntity?): Pokemon {
     return Pokemon(
-        id = entity.id,
-        nombre = entity.nombre,
-        peso = entity.peso,
-        altura = entity.altura,
-        fotoUrl = entity.fotoUrl,
-        estadisticas = entity.estadisticas,
-        tipos = entity.tipos?.map {
+        id = entity?.id ?: 0,
+        nombre = entity?.nombre ?: "",
+        peso = entity?.peso ?: 0,
+        altura = entity?.altura ?: 0,
+        fotoUrl = entity?.fotoUrl,
+        estadisticas = entity?.estadisticas,
+        tipos = entity?.tipos?.map {
             TipoPokemon(
                 slot = it.slot,
                 tipo = Tipo(it.nombre)
             )
         },
+        idEspecie = entity?.idEspecie,
+        descripcion = entity?.descripcion ?: "",
+        listaNombresMovimientos = entity?.movimientos ?: emptyList()
     )
 }
 

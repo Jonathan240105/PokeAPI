@@ -15,7 +15,7 @@ import com.example.pokenexusapplication.Data.RemoteData.Responses.PokemonConvert
 
 @Database(
     entities = [PokemonEntity::class, PokemonCompactoEntity::class, EspecieEntity::class, EvolucionEntity::class],
-    version = 7,
+    version = 9,
     exportSchema = false
 )
 @TypeConverters(PokemonConverters::class)
