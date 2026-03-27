@@ -56,7 +56,7 @@ import com.example.pokenexusapplication.ui.theme.getColorPokemon
 
 
 @Composable
-fun PantallaPrincipal(myViewModel: ViewModelPrincipal, navegarADetalle: () -> Unit) {
+fun PantallaPrincipal(myViewModel: ViewModelPrincipal, navegarADetalle: (String?, Int?) -> Unit) {
 
     val model by myViewModel.model.collectAsState()
     val estadoLista = rememberLazyGridState()
@@ -98,7 +98,7 @@ fun PantallaPrincipal(myViewModel: ViewModelPrincipal, navegarADetalle: () -> Un
             state = estadoLista
         ) {
             items(listaFiltrada) {
-                EstructuraPokemon(it, { navegarADetalle() })
+                EstructuraPokemon(it, { navegarADetalle(it.nombre, it.idEspecie) })
             }
             if (model.listaPokemons.size < 1350 && nombreBuscado.isEmpty()) {
                 item(span = { GridItemSpan(2) }) {
@@ -134,12 +134,12 @@ fun EstructuraPokemon(pokemon: Pokemon, navegarAPokemon: () -> Unit) {
             modifier = Modifier
                 .clickable(onClick = navegarAPokemon)
                 .background(
-//                    brush = Brush.verticalGradient(
-//                        colors = listOf(
-//                            colorPokemon.copy(alpha = 0.8f),
-//                            Color.White.copy(alpha = 0.9f)
-//                        )
-//                    ),
+                    //                    brush = Brush.verticalGradient(
+                    //                        colors = listOf(
+                    //                            colorPokemon.copy(alpha = 0.8f),
+                    //                            Color.White.copy(alpha = 0.9f)
+                    //                        )
+                    //                    ),
                     colorPokemon,
                     shape = RoundedCornerShape(15.dp)
                 )
@@ -162,7 +162,7 @@ fun EstructuraPokemon(pokemon: Pokemon, navegarAPokemon: () -> Unit) {
                 colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.8f))
             ) {
                 AsyncImage(
-                    model = pokemon.fotoUrl?.frontDefault,
+                    model = pokemon.fotoUrl?.other?.officialArtwork?.frontDefault,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxSize()
