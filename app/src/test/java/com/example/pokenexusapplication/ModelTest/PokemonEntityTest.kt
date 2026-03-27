@@ -7,10 +7,10 @@ import com.example.pokenexusapplication.Data.LocalData.PokemonData.TipoEntity
 import com.example.pokenexusapplication.Data.RemoteData.Responses.Tipo
 import com.example.pokenexusapplication.Data.RemoteData.Responses.TipoPokemon
 import com.example.pokenexusapplication.Domain.Pokemon
-import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
-class PokemonEntityModelTest {
+class PokemonEntityTest {
     @Test
     fun `Creación de PokemonEntity`() {
         val id = 25
@@ -18,9 +18,9 @@ class PokemonEntityModelTest {
 
         val entity = PokemonEntity(id = id, nombre = nombre, peso = 60)
 
-        TestCase.assertEquals(25, entity.id)
-        TestCase.assertEquals("Pikachu", entity.nombre)
-        TestCase.assertEquals(60, entity.peso)
+        assertEquals(25, entity.id)
+        assertEquals("Pikachu", entity.nombre)
+        assertEquals(60, entity.peso)
     }
 
     @Test
@@ -29,9 +29,9 @@ class PokemonEntityModelTest {
 
         val actualizada = original.copy(nombre = "Charmeleon", id = 5)
 
-        TestCase.assertEquals("Charmeleon", actualizada.nombre)
-        TestCase.assertEquals(5, actualizada.id)
-        TestCase.assertEquals(6, actualizada.altura)
+        assertEquals("Charmeleon", actualizada.nombre)
+        assertEquals(5, actualizada.id)
+        assertEquals(6, actualizada.altura)
     }
 
     @Test
@@ -39,15 +39,15 @@ class PokemonEntityModelTest {
         val entity1 = PokemonEntity(id = 150, nombre = "Mewtwo")
         val entity2 = PokemonEntity(id = 150, nombre = "Mewtwo")
 
-        TestCase.assertEquals(entity1, entity2)
+        assertEquals(entity1, entity2)
     }
 
     @Test
     fun `Creacion de TipoEntity`() {
         val tipo = TipoEntity(slot = 1, nombre = "Electric")
 
-        TestCase.assertEquals(1, tipo.slot)
-        TestCase.assertEquals("Electric", tipo.nombre)
+        assertEquals(1, tipo.slot)
+        assertEquals("Electric", tipo.nombre)
     }
 
     @Test
@@ -62,11 +62,11 @@ class PokemonEntityModelTest {
 
         val entity = PokemonToEntity(pokemonDominio)
 
-        TestCase.assertEquals(pokemonDominio.id, entity.id)
-        TestCase.assertEquals(pokemonDominio.nombre, entity.nombre)
-        TestCase.assertEquals(pokemonDominio.peso, entity.peso)
-        TestCase.assertEquals(1, entity.tipos?.size)
-        TestCase.assertEquals("electric", entity.tipos?.get(0)?.nombre)
+        assertEquals(pokemonDominio.id, entity.id)
+        assertEquals(pokemonDominio.nombre, entity.nombre)
+        assertEquals(pokemonDominio.peso, entity.peso)
+        assertEquals(1, entity.tipos?.size)
+        assertEquals("electric", entity.tipos?.get(0)?.nombre)
     }
 
     @Test
@@ -79,8 +79,8 @@ class PokemonEntityModelTest {
 
         val pokemon = EntityToPokemon(entity)
 
-        TestCase.assertEquals(entity.id, pokemon.id)
-        TestCase.assertEquals(entity.nombre, pokemon.nombre)
-        TestCase.assertEquals("grass", pokemon.tipos?.get(0)?.tipo?.nombre)
+        assertEquals(entity.id, pokemon.id)
+        assertEquals(entity.nombre, pokemon.nombre)
+        assertEquals("grass", pokemon.tipos?.get(0)?.tipo?.nombre)
     }
 }

@@ -1,7 +1,7 @@
 package com.example.pokenexusapplication.ModelTest
 
 import com.example.pokenexusapplication.Domain.Pokemon
-import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
 class PokemonModelTest {
@@ -15,10 +15,10 @@ class PokemonModelTest {
             altura = 4
         )
 
-        TestCase.assertEquals(25, pokemon.id)
-        TestCase.assertEquals("pikachu", pokemon.nombre)
-        TestCase.assertEquals(60, pokemon.peso)
-        TestCase.assertEquals(4, pokemon.altura)
+        assertEquals(25, pokemon.id)
+        assertEquals("pikachu", pokemon.nombre)
+        assertEquals(60, pokemon.peso)
+        assertEquals(4, pokemon.altura)
     }
 
     @Test
@@ -27,9 +27,9 @@ class PokemonModelTest {
 
         val pokemonModificado = pokemon.copy(nombre = "Ivysaur")
 
-        TestCase.assertEquals("Ivysaur", pokemonModificado.nombre)
-        TestCase.assertEquals(1, pokemonModificado.id)
-        TestCase.assertEquals(69, pokemonModificado.peso)
+        assertEquals("Ivysaur", pokemonModificado.nombre)
+        assertEquals(1, pokemonModificado.id)
+        assertEquals(69, pokemonModificado.peso)
     }
 
     @Test
@@ -37,8 +37,8 @@ class PokemonModelTest {
         val p1 = Pokemon(id = 150, nombre = "Mewtwo")
         val p2 = Pokemon(id = 150, nombre = "Mewtwo")
 
-        TestCase.assertEquals(p1, p2)
-        TestCase.assertEquals(p1.hashCode(), p2.hashCode())
+        assertEquals(p1, p2)
+        assertEquals(p1.hashCode(), p2.hashCode())
     }
 
 

@@ -2,7 +2,6 @@ package com.example.pokenexusapplication.Views.Screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,11 +39,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.ExtraBold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -56,14 +53,21 @@ import com.example.pokenexusapplication.ui.theme.FondoPantalla
 import com.example.pokenexusapplication.ui.theme.GrisBorde
 import com.example.pokenexusapplication.ui.theme.PokedexRojo
 import com.example.pokenexusapplication.ui.theme.getColorPokemon
+import com.example.pokenexusapplication.ui.theme.silkFamily
 
 
 @Composable
-fun PantallaPrincipal(myViewModel: ViewModelPrincipal, navegarADetalle: () -> Unit) {
+fun PantallaPrincipal(myViewModel: ViewModelPrincipal, navegarADetalle: (String?, Int?) -> Unit) {
 
     val model by myViewModel.model.collectAsState()
+
+    //Con el estado de la lista, podemos saber cuando el usuario ya no tiene mas elementos para scrollear
     val estadoLista = rememberLazyGridState()
     var nombreBuscado by remember { mutableStateOf("") }
+
+    //Esta lista sirve para que la pantalla muestre dos listas diferentes. En caso de que haya
+    //algo escrito en el buscador, el usuario buscara un pokemon especifico o varios.
+    //Como el endpoint no te muestra varios pokemons si escribes solo una letra, solo buscará en los locales
 
     val listaFiltrada = if (nombreBuscado.isEmpty()) {
         model.listaPokemons
@@ -86,12 +90,7 @@ fun PantallaPrincipal(myViewModel: ViewModelPrincipal, navegarADetalle: () -> Un
 
     ) {
         tituloListado()
-        Spacer(
-            Modifier
-                .fillMaxWidth()
-                .height(5.dp)
-                .background(GrisBorde)
-        )
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             Modifier
@@ -101,8 +100,10 @@ fun PantallaPrincipal(myViewModel: ViewModelPrincipal, navegarADetalle: () -> Un
             state = estadoLista
         ) {
             items(listaFiltrada) {
-                EstructuraPokemon(it, { navegarADetalle() })
+                EstructuraPokemon(it, { navegarADetalle(it.nombre, it.idEspecie) })
             }
+            //En caso de que falten pokemons por detallar en la lista y no se este usando el buscador,
+            //se genera unn texto para que ell usuario sepa que se esta cargando la siguiente pagina
             if (model.listaPokemons.size < 1350 && nombreBuscado.isEmpty()) {
                 item(span = { GridItemSpan(2) }) {
                     Text(
@@ -110,6 +111,7 @@ fun PantallaPrincipal(myViewModel: ViewModelPrincipal, navegarADetalle: () -> Un
                         Modifier
                             .padding(20.dp)
                             .fillMaxWidth(),
+                        color = Color.White,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -137,12 +139,12 @@ fun EstructuraPokemon(pokemon: Pokemon, navegarAPokemon: () -> Unit) {
             modifier = Modifier
                 .clickable(onClick = navegarAPokemon)
                 .background(
-//                    brush = Brush.verticalGradient(
-//                        colors = listOf(
-//                            colorPokemon.copy(alpha = 0.8f),
-//                            Color.White.copy(alpha = 0.9f)
-//                        )
-//                    ),
+                    //                    brush = Brush.verticalGradient(
+                    //                        colors = listOf(
+                    //                            colorPokemon.copy(alpha = 0.8f),
+                    //                            Color.White.copy(alpha = 0.9f)
+                    //                        )
+                    //                    ),
                     colorPokemon,
                     shape = RoundedCornerShape(15.dp)
                 )
@@ -152,10 +154,11 @@ fun EstructuraPokemon(pokemon: Pokemon, navegarAPokemon: () -> Unit) {
         ) {
             Text(
                 pokemon.nombre.replaceFirstChar { it.uppercase() },
-                fontSize = 20.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = Color.Black,
-                letterSpacing = 1.sp
+                letterSpacing = 1.sp,
+                fontFamily = silkFamily
             )
 
             Spacer(Modifier.height(5.dp))
@@ -165,7 +168,7 @@ fun EstructuraPokemon(pokemon: Pokemon, navegarAPokemon: () -> Unit) {
                 colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.8f))
             ) {
                 AsyncImage(
-                    model = pokemon.fotoUrl?.frontDefault,
+                    model = pokemon.fotoUrl?.other?.officialArtwork?.frontDefault,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxSize()
@@ -190,7 +193,7 @@ fun EstructuraPokemon(pokemon: Pokemon, navegarAPokemon: () -> Unit) {
                 )
                 Spacer(Modifier.width(15.dp))
                 Text(
-                    "HP ${pokemon.estadísticas?.getOrNull(0)?.valor?.toString() ?: "0"}",
+                    "HP ${pokemon.estadisticas?.getOrNull(0)?.valor?.toString() ?: "0"}",
                     fontSize = 14.sp,
                     fontWeight = ExtraBold,
                     color = Color.White
@@ -221,7 +224,8 @@ fun tituloListado() {
             fontWeight = FontWeight.Black,
             color = Color(0xFF51ADFB),
             letterSpacing = 5.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontFamily = silkFamily
         )
     }
 }
@@ -237,22 +241,29 @@ fun buscador(valor: String, cambiarTextField: (String) -> Unit) {
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 90.dp)
+                .padding(horizontal = 32.dp)
         ) {
             OutlinedTextField(
                 valor,
                 cambiarTextField,
                 Modifier.testTag("textFieldBusqueda"),
-                trailingIcon = { Icon(Icons.Default.Search, "") },
+                trailingIcon = {
+                    Icon(
+                        Icons.Default.Search,
+                        "",
+                        tint = Color.White.copy(alpha = 0.7f)
+                    )
+                },
+                placeholder = { Text("Charizard,Bulbasur...", color = Color.Gray) },
                 singleLine = true,
                 label = { Text("Buscar Pokemon") },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = Color.White,
                     unfocusedTextColor = Color.White,
-                    focusedContainerColor = Color(0xFF2B2B2B),
+                    focusedContainerColor = Color(0xFF1E1E1E),
                     unfocusedContainerColor = Color(0xFF2B2B2B),
-                    focusedBorderColor = Color.White,
-                    unfocusedBorderColor = Color.Gray,
+                    focusedBorderColor = Color(0xFF51ADFB),
+                    unfocusedBorderColor = Color.Transparent,
                     focusedLabelColor = Color.White,
                     disabledLabelColor = Color.White
                 )

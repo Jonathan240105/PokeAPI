@@ -21,14 +21,20 @@ class ViewModelPrincipal @Inject constructor(
     private val _model = MutableStateFlow(ModelPrincipal())
 
     val model = _model.asStateFlow()
+    //variables para el paginado de pokemons
     private var salto = 0
     private val limite = 20
 
+    //Al lanzar la pantalla principal, se lista todos los pokemons compactos,
+    // y se carga la primera pagina que es la que ve el usuario
     init {
         listarPokemons()
         cargarSiguientePagina()
     }
 
+    //Función que carga la pagina de pokemons. Solo es lanzada cuando el usuario llega al final de la lista
+    //de pokemons que tiene guardada. Cuando se llama, llama al repositorio para que devuelva todos los
+    //detalles de cada pokemon de la pagina, y añade los pokemons a la lista para que la pantalla tenga mas scroll
     fun cargarSiguientePagina() {
 
         if (_model.value.isLoading) {
@@ -38,19 +44,24 @@ class ViewModelPrincipal @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _model.update { it.copy(isLoading = true) }
 
-            val nuevosPokemons = repository.traerPaginaPokemon(limite, salto)
+            try {
+                val nuevosPokemons = repository.getPaginaPokemon(limite, salto)
 
-            _model.update {
-                it.copy(
-                    listaPokemons = it.listaPokemons + nuevosPokemons,
-                    isLoading = false,
-                    succes = true
-                )
+                _model.update {
+                    it.copy(
+                        listaPokemons = it.listaPokemons + nuevosPokemons,
+                        isLoading = false,
+                        succes = true
+                    )
+                }
+                salto += limite
+            }catch (e: Exception){
+                println(e.message)
             }
-            salto += limite
         }
     }
 
+    //Función que llama al repositorio para que liste todos los pokemons compactos
     fun listarPokemons() {
         viewModelScope.launch {
             repository.listarTodosPokemonsCompactos().collect { pokemons ->

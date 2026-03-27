@@ -6,6 +6,7 @@ import com.example.pokenexusapplication.Data.LocalData.PokemonCompactoData.Pokem
 import com.example.pokenexusapplication.Data.RemoteData.Responses.PokemonCompacto
 import com.example.pokenexusapplication.Data.RemoteData.Responses.PokemonCompactoList
 import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
 class PokemonCompactoEntityTest {
@@ -14,9 +15,9 @@ class PokemonCompactoEntityTest {
     fun `Creacion de la entidad con valores correctos`() {
         val entity = PokemonCompactoEntity(id = 1, name = "Bulbasaur", url = "url")
 
-        TestCase.assertEquals(1, entity.id)
-        TestCase.assertEquals("Bulbasaur", entity.name)
-        TestCase.assertEquals("url", entity.url)
+        assertEquals(1, entity.id)
+        assertEquals("Bulbasaur", entity.name)
+        assertEquals("url", entity.url)
     }
 
     @Test
@@ -25,9 +26,9 @@ class PokemonCompactoEntityTest {
 
         val copia = original.copy(name = "Ivysaur")
 
-        TestCase.assertEquals("Ivysaur", copia.name)
-        TestCase.assertEquals(original.id, copia.id)
-        TestCase.assertEquals(original.url, copia.url)
+        assertEquals("Ivysaur", copia.name)
+        assertEquals(original.id, copia.id)
+        assertEquals(original.url, copia.url)
     }
 
     @Test
@@ -35,8 +36,8 @@ class PokemonCompactoEntityTest {
         val entity1 = PokemonCompactoEntity(id = 25, name = "Pikachu", url = "url/25/")
         val entity2 = PokemonCompactoEntity(id = 25, name = "Pikachu", url = "url/25/")
 
-        TestCase.assertEquals(entity1, entity2)
-        TestCase.assertEquals(entity1.hashCode(), entity2.hashCode())
+        assertEquals(entity1, entity2)
+        assertEquals(entity1.hashCode(), entity2.hashCode())
     }
 
     @Test
@@ -48,8 +49,8 @@ class PokemonCompactoEntityTest {
 
         val entity = CompactoToEntity(compacto)
 
-        TestCase.assertEquals(1, entity.id)
-        TestCase.assertEquals("bulbasaur", entity.name)
+        assertEquals(1, entity.id)
+        assertEquals("bulbasaur", entity.name)
     }
 
     @Test
@@ -62,8 +63,8 @@ class PokemonCompactoEntityTest {
 
         val compacto = EntityToCompacto(entity)
 
-        TestCase.assertEquals("pikachu", compacto.name)
-        TestCase.assertEquals("https://pokeapi.co/api/v2/pokemon/25/", compacto.url)
+        assertEquals("pikachu", compacto.name)
+        assertEquals("https://pokeapi.co/api/v2/pokemon/25/", compacto.url)
     }
 
     @Test
@@ -75,8 +76,8 @@ class PokemonCompactoEntityTest {
 
         val contenedor = PokemonCompactoList(listaDePrueba)
 
-        TestCase.assertEquals(2, contenedor.results.size)
-        TestCase.assertEquals("Bulbasaur", contenedor.results[0].name)
+        assertEquals(2, contenedor.results.size)
+        assertEquals("Bulbasaur", contenedor.results[0].name)
     }
 
     @Test
@@ -86,7 +87,7 @@ class PokemonCompactoEntityTest {
 
         val copia = original.copy(results = nuevaLista)
 
-        TestCase.assertEquals(1, copia.results.size)
-        TestCase.assertEquals("2", copia.results[0].name)
+        assertEquals(1, copia.results.size)
+        assertEquals("2", copia.results[0].name)
     }
 }

@@ -2,7 +2,9 @@ package com.example.pokenexusapplication.ModelTest
 
 import com.example.pokenexusapplication.Domain.ModelPrincipal
 import com.example.pokenexusapplication.Domain.Pokemon
-import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import org.junit.Test
 
 class ModelPrincipalTest {
@@ -11,8 +13,8 @@ class ModelPrincipalTest {
     fun `Creación del modelo inicial`() {
         val modelo = ModelPrincipal(isLoading = true, succes = false)
 
-        TestCase.assertTrue(modelo.isLoading)
-        TestCase.assertFalse(modelo.succes)
+        assertTrue(modelo.isLoading)
+        assertFalse(modelo.succes)
     }
 
     @Test
@@ -21,8 +23,8 @@ class ModelPrincipalTest {
 
         val modelNuevo = model.copy(isLoading = false)
 
-        TestCase.assertFalse(modelNuevo.isLoading)
-        TestCase.assertFalse(modelNuevo.succes)
+        assertFalse(modelNuevo.isLoading)
+        assertFalse(modelNuevo.succes)
     }
 
     @Test
@@ -30,7 +32,7 @@ class ModelPrincipalTest {
         val model1 = ModelPrincipal(isLoading = true, succes = false)
         val model2 = ModelPrincipal(isLoading = true, succes = false)
 
-        TestCase.assertEquals(model1, model2)
+        assertEquals(model1, model2)
     }
 
     @Test
@@ -44,17 +46,17 @@ class ModelPrincipalTest {
             succes = true
         )
 
-        TestCase.assertFalse(modeloCargado.isLoading)
-        TestCase.assertTrue(modeloCargado.succes)
-        TestCase.assertEquals(1, modeloCargado.listaPokemons.size)
-        TestCase.assertEquals("Pikachu", modeloCargado.listaPokemons[0].nombre)
+        assertFalse(modeloCargado.isLoading)
+        assertTrue(modeloCargado.succes)
+        assertEquals(1, modeloCargado.listaPokemons.size)
+        assertEquals("Pikachu", modeloCargado.listaPokemons[0].nombre)
     }
 
     @Test
     fun `El modelo inicial debe tener las listas vacias`() {
         val modelo = ModelPrincipal()
 
-        TestCase.assertTrue(modelo.listaPokemons.isEmpty())
-        TestCase.assertTrue(modelo.listaPokemonsCompactos.isEmpty())
+        assertTrue(modelo.listaPokemons.isEmpty())
+        assertTrue(modelo.listaPokemonsCompactos.isEmpty())
     }
 }

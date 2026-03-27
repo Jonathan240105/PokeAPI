@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.pokenexusapplication.Views.ViewModels.ViewModelPrincipal
+import com.example.pokenexusapplication.ui.theme.silkFamily
+import kotlinx.coroutines.delay
 
 @Composable
 fun PantallaInicial(myViewModel: ViewModelPrincipal, navegarAPrincipal: () -> Unit) {
@@ -36,6 +39,7 @@ fun PantallaInicial(myViewModel: ViewModelPrincipal, navegarAPrincipal: () -> Un
         myViewModel.cargarSiguientePagina()
     }
     LaunchedEffect(model.succes) {
+        delay(3000)
         if (model.succes) {
             navegarAPrincipal()
         }
@@ -52,27 +56,32 @@ fun PantallaInicial(myViewModel: ViewModelPrincipal, navegarAPrincipal: () -> Un
                 .fillMaxWidth()
                 .padding(top = 50.dp)
                 .padding(horizontal = 50.dp)
-                .background(Color.White), horizontalArrangement = Arrangement.Center
+                .background(
+                    Color.White.copy(alpha = 0.85f), RoundedCornerShape(16.dp)
+                ),
+            horizontalArrangement = Arrangement.Center
         ) {
             Text(
                 "Poke-Nexus",
                 textAlign = TextAlign.Center,
-                fontSize = 45.sp,
+                fontSize = 35.sp,
                 color = Color.Black,
+                fontFamily = silkFamily,
                 modifier = Modifier.testTag("tituloInicial")
             )
         }
         Row(
             Modifier
                 .align(Alignment.BottomEnd)
-                .navigationBarsPadding()
-                .background(Color.Black)
                 .padding(bottom = 30.dp, end = 30.dp)
+                .navigationBarsPadding()
+                .background(Color.Black.copy(alpha = 0.75f), RoundedCornerShape(12.dp))
         ) {
             Text(
                 "Cargando...",
                 color = Color.White,
                 fontSize = 35.sp,
+                fontFamily = silkFamily,
                 modifier = Modifier.testTag("textoCarga")
             )
 

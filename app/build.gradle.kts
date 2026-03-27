@@ -110,4 +110,5 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.mockk.android)
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.0")
 }

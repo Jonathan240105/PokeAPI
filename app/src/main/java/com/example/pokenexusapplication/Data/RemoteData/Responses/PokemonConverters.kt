@@ -39,4 +39,14 @@ class PokemonConverters {
         val type = object : TypeToken<List<TipoEntity>>() {}.type
         return gson.fromJson(json, type)
     }
+
+    @TypeConverter
+    fun fromMovesString(value: String): List<String> {
+        return value.split(",").map { it.trim() }
+    }
+
+    @TypeConverter
+    fun fromMovesList(list: List<String>): String {
+        return list.joinToString(",")
+    }
 }

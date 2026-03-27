@@ -29,7 +29,7 @@ class UITestPantallaPrincipal {
 
     fun lanzarPantallaPrincipal() {
         val viewModel = mockk<ViewModelPrincipal>()
-        val navegar = mockk<() -> Unit>(relaxed = true)
+        val navegar = mockk<(String?, Int?) -> Unit>(relaxed = true)
         val estadoInicial = MutableStateFlow(ModelPrincipal(isLoading = true, succes = false))
 
         every { viewModel.model } returns estadoInicial.asStateFlow()
