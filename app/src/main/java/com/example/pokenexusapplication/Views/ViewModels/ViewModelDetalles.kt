@@ -2,9 +2,9 @@ package com.example.pokenexusapplication.Views.ViewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pokenexusapplication.Data.LocalData.PokemonData.EntityToPokemon
 import com.example.pokenexusapplication.Data.Repository.Repository
 import com.example.pokenexusapplication.Domain.ModelDetalles
-import com.example.pokenexusapplication.Domain.ModelPrincipal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,10 +19,21 @@ class ViewModelDetalles @Inject constructor(
     private val _model = MutableStateFlow(ModelDetalles())
     val model = _model.asStateFlow()
 
-    fun listarEvoluciones(idPokemon: Int) {
+    fun getPokemonPorNombre(nombrePokemon: String) {
         viewModelScope.launch {
-            repository.getEvolucion(idPokemon).collect {
-                _model.update { it.copy(listaEvoluciones = it.listaEvoluciones) }
+            repository.getPokemonPorNombre(nombrePokemon).collect { pokemon ->
+                _model.update { it.copy(pokemonActual = EntityToPokemon(pokemon)) }
+            }
+        }
+    }
+
+    fun getEspecieYEvoluciones(idEspecie: Int) {
+        viewModelScope.launch {
+            repository.getEspecie(idEspecie).collect { especie ->
+                val idEvoluciones = especie.idEvoluciones
+                repository.getEvolucion(idEvoluciones).collect { evoluciones ->
+                    _model.update { it.copy(listaEvoluciones = evoluciones) }
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.example.pokenexusapplication.Data.Repository
 
 import com.example.pokenexusapplication.Data.LocalData.EspecieData.EspecieDao
+import com.example.pokenexusapplication.Data.LocalData.EspecieData.EspecieEntity
 import com.example.pokenexusapplication.Data.LocalData.EspecieData.EspecieToEntity
 import com.example.pokenexusapplication.Data.LocalData.EvolucionData.EntityToEvolucion
 import com.example.pokenexusapplication.Data.LocalData.EvolucionData.EvolucionDao
@@ -14,7 +15,6 @@ import com.example.pokenexusapplication.Data.LocalData.PokemonData.PokemonEntity
 import com.example.pokenexusapplication.Data.LocalData.PokemonData.PokemonToEntity
 import com.example.pokenexusapplication.Data.RemoteData.DataInterface
 import com.example.pokenexusapplication.Domain.Especie
-import com.example.pokenexusapplication.Data.RemoteData.Responses.Evolucion
 import com.example.pokenexusapplication.Domain.EvolucionModel
 import com.example.pokenexusapplication.Domain.Pokemon
 import com.example.pokenexusapplication.Domain.getDescripcionDeLista
@@ -90,8 +90,8 @@ class RepositoryImp @Inject constructor(
         return listaFinal.map { EntityToPokemon(it) }
     }
 
-    override suspend fun getEvolucion(idEvolucion: Int): Flow<List<EvolucionModel>> = flow {
-        var evolucionesLocales = evoDao.getEvoluciones(idEvolucion)
+    override suspend fun getEvolucion(idEvolucion: Int?): Flow<List<EvolucionModel>> = flow {
+        var evolucionesLocales = evoDao.getEvoluciones(idEvolucion ?: 1)
 
         if (evolucionesLocales.isEmpty()) {
             try {
@@ -110,5 +110,52 @@ class RepositoryImp @Inject constructor(
         }
         println(evolucionesLocales)
         emit(EntityToEvolucion(evolucionesLocales))
+    }
+
+    override suspend fun getPokemonPorNombre(nombrePokemon: String): Flow<PokemonEntity?> = flow {
+        var PokemonEntero = pokedao.getPokemonByName(nombrePokemon)
+        if (PokemonEntero == null) {
+            try {
+                val response = api.pillarUnPokemon(nombrePokemon)
+
+                if (response.isSuccessful) {
+
+                    val pokemonTraido = PokemonToEntity(response.body() ?: Pokemon())
+
+                    val especie = api.getEspecie(pokemonTraido.idEspecie)
+                    if (especie.isSuccessful) {
+                        pokemonTraido.descripcion =
+                            getDescripcionDeLista(especie.body()?.descripcion)
+                        especieDao.insertarEspecie(
+                            EspecieToEntity(
+                                especie.body() ?: Especie()
+                            )
+                        )
+
+                    }
+                    pokedao.añadirPokemon(pokemonTraido)
+                    PokemonEntero = pokemonTraido
+                }
+            } catch (e: Exception) {
+                println("Error: ${e.message}")
+            }
+        }
+        emit(PokemonEntero)
+    }
+
+    override suspend fun getEspecie(idEspecie: Int): Flow<EspecieEntity> = flow {
+        var especie = especieDao.getEspeciePorId(idEspecie)
+        if (especie == null) {
+            val response = api.getEspecie(idEspecie)
+
+            if (response.isSuccessful) {
+                val especieTraida = response.body()
+                if (especieTraida != null) {
+                    especieDao.insertarEspecie(EspecieToEntity(especieTraida))
+                    especie = EspecieToEntity(especieTraida)
+                }
+            }
+        }
+        emit(especie ?: EspecieEntity(1, 1))
     }
 }

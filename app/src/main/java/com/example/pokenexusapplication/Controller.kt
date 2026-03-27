@@ -33,10 +33,12 @@ fun Controller() {
         composable(Rutas.PANTALLA_PRINCIPAL) {
             PantallaPrincipal(
                 viewModelPrincipal,
-                { navController.navigate(Rutas.PANTALLA_DETALLADA) })
+                { nombrePokemon, idEspecie -> navController.navigate("pantallaDetallada/$nombrePokemon/$idEspecie") })
         }
         composable(Rutas.PANTALLA_DETALLADA) {
-            PantallaDetallada(viewModelDetalles)
+            val nombrePokemon = it.arguments?.getString("nombrePokemon")
+            val idEspecie = it.arguments?.getString("idEspecie")
+            PantallaDetallada(viewModelDetalles, nombrePokemon, idEspecie?.toInt())
         }
         composable(Rutas.PANTALLA_EVOLUCIONES) {
             PantallaEvoluciones()
