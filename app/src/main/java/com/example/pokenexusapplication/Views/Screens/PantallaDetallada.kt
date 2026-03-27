@@ -98,7 +98,7 @@ fun tituloDetalles(nombrePokemon: String) {
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentHeight(Alignment.CenterVertically)
-                .testTag("tituloPrincipal"),
+                .testTag("tituloDetallada"),
             fontSize = 25.sp,
             fontWeight = FontWeight.Black,
             color = Color(0xFF51ADFB),
@@ -138,7 +138,7 @@ fun tabRowDetalles(
     listaMovimientos: List<String>
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Información", "Estadísticas", "Evoluciones")
+    val tabs = listOf("Información", "Evoluciones", "Movimientos")
 
     Column(
         modifier = Modifier
