@@ -5,11 +5,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.pokenexusapplication.Views.Screens.PantallaCarga
 import com.example.pokenexusapplication.Views.Screens.PantallaDetallada
-import com.example.pokenexusapplication.Views.Screens.PantallaEvoluciones
 import com.example.pokenexusapplication.Views.Screens.PantallaInicial
-import com.example.pokenexusapplication.Views.Screens.PantallaMovimientos
 import com.example.pokenexusapplication.Views.Screens.PantallaPrincipal
 import com.example.pokenexusapplication.Views.ViewModels.ViewModelDetalles
 import com.example.pokenexusapplication.Views.ViewModels.ViewModelPrincipal
@@ -27,9 +24,6 @@ fun Controller() {
                 viewModelPrincipal,
                 { navController.navigate(Rutas.PANTALLA_PRINCIPAL) })
         }
-        composable(Rutas.PANTALLA_CARGA) {
-            PantallaCarga()
-        }
         composable(Rutas.PANTALLA_PRINCIPAL) {
             PantallaPrincipal(
                 viewModelPrincipal,
@@ -38,13 +32,8 @@ fun Controller() {
         composable(Rutas.PANTALLA_DETALLADA) {
             val nombrePokemon = it.arguments?.getString("nombrePokemon")
             val idEspecie = it.arguments?.getString("idEspecie")
-            PantallaDetallada(viewModelDetalles, nombrePokemon, idEspecie?.toInt())
-        }
-        composable(Rutas.PANTALLA_EVOLUCIONES) {
-            PantallaEvoluciones()
-        }
-        composable(Rutas.PANTALLA_MOVIMIENTOS) {
-            PantallaMovimientos()
+            PantallaDetallada(viewModelDetalles, nombrePokemon, idEspecie?.toInt(),{navController.navigate(
+                Rutas.PANTALLA_PRINCIPAL)})
         }
     }
 }

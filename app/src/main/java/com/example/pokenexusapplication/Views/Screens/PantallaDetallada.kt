@@ -17,8 +17,13 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -46,7 +51,12 @@ import com.example.pokenexusapplication.ui.theme.getColorPokemon
 import com.example.pokenexusapplication.ui.theme.silkFamily
 
 @Composable
-fun PantallaDetallada(myViewModel: ViewModelDetalles, nombrePokemon: String?, idEspecie: Int?) {
+fun PantallaDetallada(
+    myViewModel: ViewModelDetalles,
+    nombrePokemon: String?,
+    idEspecie: Int?,
+    onVolver: () -> Unit
+) {
     val model by myViewModel.model.collectAsState()
     LaunchedEffect(Unit) {
         myViewModel.getPokemonPorNombre(nombrePokemon ?: "")
@@ -58,7 +68,7 @@ fun PantallaDetallada(myViewModel: ViewModelDetalles, nombrePokemon: String?, id
             .background(getColorPokemon(model.pokemonActual.tipos?.get(0)?.tipo?.nombre ?: ""))
             .navigationBarsPadding()
     ) {
-        tituloDetalles(model.pokemonActual.nombre)
+        tituloDetalles(model.pokemonActual.nombre, onVolver)
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             AsyncImage(
                 model.pokemonActual.fotoUrl?.other?.officialArtwork?.frontDefault,
@@ -79,7 +89,7 @@ fun PantallaDetallada(myViewModel: ViewModelDetalles, nombrePokemon: String?, id
 }
 
 @Composable
-fun tituloDetalles(nombrePokemon: String) {
+fun tituloDetalles(nombrePokemon: String, onVolver: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -89,19 +99,33 @@ fun tituloDetalles(nombrePokemon: String) {
         colors = CardDefaults.cardColors(containerColor = Color(0xFF2B2B2B)),
         shape = RoundedCornerShape(12.dp),
     ) {
-        Text(
-            nombrePokemon,
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentHeight(Alignment.CenterVertically)
-                .testTag("tituloDetallada"),
-            fontSize = 25.sp,
-            fontWeight = FontWeight.Black,
-            color = Color(0xFF51ADFB),
-            letterSpacing = 5.sp,
-            textAlign = TextAlign.Center,
-            fontFamily = silkFamily
-        )
+
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+            IconButton(
+                onVolver,
+                colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White),
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Icon(Icons.Default.ArrowBack, "")
+            }
+            Text(
+                nombrePokemon,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentHeight(Alignment.CenterVertically)
+                    .testTag("tituloDetallada"),
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Black,
+                color = Color(0xFF51ADFB),
+                letterSpacing = 5.sp,
+                textAlign = TextAlign.Center,
+                fontFamily = silkFamily
+            )
+        }
     }
     Spacer(
         Modifier
