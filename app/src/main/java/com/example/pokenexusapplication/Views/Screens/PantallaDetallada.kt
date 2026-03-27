@@ -1,6 +1,5 @@
 package com.example.pokenexusapplication.Views.Screens
 
-import android.R.id.tabs
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,12 +38,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.pokenexusapplication.Data.LocalData.EvolucionData.EvolucionEntity
 import com.example.pokenexusapplication.Domain.EvolucionModel
 import com.example.pokenexusapplication.Domain.Pokemon
 import com.example.pokenexusapplication.Views.ViewModels.ViewModelDetalles
 import com.example.pokenexusapplication.ui.theme.PokedexRojo
 import com.example.pokenexusapplication.ui.theme.getColorPokemon
+import com.example.pokenexusapplication.ui.theme.silkFamily
 
 @Composable
 fun PantallaDetallada(myViewModel: ViewModelDetalles, nombrePokemon: String?, idEspecie: Int?) {
@@ -58,7 +57,6 @@ fun PantallaDetallada(myViewModel: ViewModelDetalles, nombrePokemon: String?, id
             .fillMaxSize()
             .background(getColorPokemon(model.pokemonActual.tipos?.get(0)?.tipo?.nombre ?: ""))
             .navigationBarsPadding()
-
     ) {
         tituloDetalles(model.pokemonActual.nombre)
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -68,8 +66,6 @@ fun PantallaDetallada(myViewModel: ViewModelDetalles, nombrePokemon: String?, id
                 modifier = Modifier.size(200.dp)
             )
         }
-        Text("id especie : ${model.pokemonActual.idEspecie}")
-        println("Evoluciones: ${model.listaEvoluciones}")
         cardDetalles(
             Modifier
                 .fillMaxWidth()
@@ -103,7 +99,8 @@ fun tituloDetalles(nombrePokemon: String) {
             fontWeight = FontWeight.Black,
             color = Color(0xFF51ADFB),
             letterSpacing = 5.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontFamily = silkFamily
         )
     }
     Spacer(
@@ -124,7 +121,8 @@ fun cardDetalles(
 ) {
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp)
+        shape = RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.62f))
     ) {
         tabRowDetalles(pokemon, listaEvoluciones, onBuscarPokemon, listaMovimientos)
     }
@@ -144,7 +142,6 @@ fun tabRowDetalles(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 20.dp)
-
     ) {
         TabRow(
             selectedTabIndex = selectedTabIndex,
@@ -159,8 +156,9 @@ fun tabRowDetalles(
                     text = {
                         Text(
                             text = title,
-                            fontSize = 14.sp,
-                            fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal
+                            fontSize = 12.sp,
+                            fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
+                            fontFamily = silkFamily
                         )
                     }
                 )
@@ -175,7 +173,6 @@ fun tabRowDetalles(
             when (selectedTabIndex) {
                 0 -> estructuraDetalles(pokemon)
                 1 -> EvolucionesTab(listaEvoluciones, onBuscarPokemon)
-
                 2 -> MovimientosTab(listaMovimientos)
             }
         }
@@ -192,23 +189,33 @@ fun estructuraDetalles(pokemon: Pokemon) {
             .fillMaxWidth()
             .padding(20.dp)
             .verticalScroll(estadoScroll)
-
     ) {
-        Text("Descripción", fontWeight = FontWeight.Bold)
-
-        Text(
-            text = pokemon.descripcion,
-            fontSize = 15.sp,
-            color = Color.DarkGray,
-            textAlign = TextAlign.Justify
-        )
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .background(Color.White.copy(alpha = 0.6f), RoundedCornerShape(10.dp))
+                .padding(10.dp)
+        ) {
+            Text(
+                "Descripción",
+                fontWeight = FontWeight.Bold,
+                fontFamily = silkFamily
+            )
+            Text(
+                text = pokemon.descripcion,
+                fontSize = 15.sp,
+                color = Color.DarkGray,
+                textAlign = TextAlign.Justify,
+                fontFamily = silkFamily
+            )
+        }
 
         Spacer(Modifier.height(20.dp))
 
         Row(
             Modifier
                 .fillMaxWidth()
-                .background(Color.LightGray.copy(alpha = 0.2f), RoundedCornerShape(15.dp))
+                .background(Color.White.copy(alpha = 0.7f), RoundedCornerShape(15.dp))
                 .padding(15.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -216,23 +223,39 @@ fun estructuraDetalles(pokemon: Pokemon) {
                 Text(
                     "${pokemon.altura.toFloat() / 10} m",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    fontFamily = silkFamily
                 )
-                Text("Altura", fontSize = 15.sp, color = Color.Gray)
+                Text(
+                    "Altura",
+                    fontSize = 15.sp,
+                    color = Color.Gray,
+                    fontFamily = silkFamily
+                )
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     "${pokemon.peso.toFloat() / 10} kg",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    fontFamily = silkFamily
                 )
-                Text("Peso", fontSize = 15.sp, color = Color.Gray)
+                Text(
+                    "Peso",
+                    fontSize = 15.sp,
+                    color = Color.Gray,
+                    fontFamily = silkFamily
+                )
             }
         }
 
         Spacer(Modifier.height(20.dp))
 
-        Text("Tipos:", fontWeight = FontWeight.Bold)
+        Text(
+            "Tipos:",
+            fontWeight = FontWeight.Bold,
+            fontFamily = silkFamily
+        )
         Row(Modifier.padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             pokemon.tipos?.forEach { tipo ->
                 Text(
@@ -242,38 +265,55 @@ fun estructuraDetalles(pokemon: Pokemon) {
                         .padding(horizontal = 12.dp, vertical = 4.dp),
                     color = Color.White,
                     fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = silkFamily
                 )
             }
         }
 
         Spacer(Modifier.height(20.dp))
 
-        Text("Estadísticas:", fontWeight = FontWeight.Bold)
+        Text(
+            "Estadísticas:",
+            fontWeight = FontWeight.Bold,
+            fontFamily = silkFamily
+        )
         Spacer(Modifier.height(8.dp))
 
         val nombresStats = listOf("Vida", "Ataque", "Defensa", "Ataque Especial")
-
-        pokemon.estadisticas?.take(4)?.forEachIndexed { index, stat ->
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 5.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(nombresStats[index], color = Color.Gray)
-                Text(
-                    text = stat.valor.toString(),
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .background(Color.White.copy(alpha = 0.6f), RoundedCornerShape(12.dp))
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+            pokemon.estadisticas?.take(4)?.forEachIndexed { index, stat ->
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        nombresStats[index],
+                        color = Color.Gray,
+                        fontFamily = silkFamily
+                    )
+                    Text(
+                        text = stat.valor.toString(),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        color = Color.Black,
+                        fontFamily = silkFamily
+                    )
+                }
+                Spacer(
+                    Modifier
+                        .height(1.dp)
+                        .fillMaxWidth()
+                        .background(Color.LightGray)
                 )
             }
-            Spacer(
-                Modifier
-                    .height(1.dp)
-                    .fillMaxWidth()
-                    .background(Color.LightGray)
-            )
         }
     }
 }
@@ -282,7 +322,10 @@ fun estructuraDetalles(pokemon: Pokemon) {
 fun EvolucionesTab(evoluciones: List<EvolucionModel>, onPokemonClick: (String) -> Unit) {
     if (evoluciones.isEmpty()) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Este Pokémon no tiene evoluciones conocidas.")
+            Text(
+                "Este Pokémon no tiene evoluciones conocidas.",
+                fontFamily = silkFamily
+            )
         }
     } else {
         Column(
@@ -318,28 +361,39 @@ fun ItemEvolucion(evo: EvolucionModel, onNombreClick: (String) -> Unit) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     evo.nombrePokemonBase.replaceFirstChar { it.uppercase() },
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = silkFamily
                 )
             }
-
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("->", fontSize = 20.sp, color = Color.Gray)
+                Text(
+                    "->",
+                    fontSize = 20.sp,
+                    color = Color.Gray,
+                    fontFamily = silkFamily
+                )
                 if (evo.nivelMinimo != 0) {
                     Text(
                         "Nivel ${evo.nivelMinimo}",
                         fontSize = 12.sp,
                         color = Color.DarkGray,
-                        fontWeight = FontWeight.Light
+                        fontWeight = FontWeight.Light,
+                        fontFamily = silkFamily
                     )
                 } else {
-                    Text(" Evento especial", fontSize = 10.sp, color = Color.Blue)
+                    Text(
+                        "Evento especial",
+                        fontSize = 10.sp,
+                        color = Color.Blue,
+                        fontFamily = silkFamily
+                    )
                 }
             }
-
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     evo.nombrePokemonEvolucion.replaceFirstChar { it.uppercase() },
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = silkFamily
                 )
             }
         }
@@ -352,26 +406,34 @@ fun MovimientosTab(movimientos: List<String>) {
 
     if (movimientos.isEmpty()) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("No hay movimientos registrados")
+            Text(
+                "No hay movimientos registrados",
+                fontFamily = silkFamily
+            )
         }
     } else {
         Column(
             Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(8.dp)
+                .padding(15.dp)
+                .background(Color.White.copy(alpha = 0.6f), RoundedCornerShape(12.dp))
+                .padding(horizontal = 12.dp, vertical = 8.dp)
         ) {
             Text(
                 "Lista de ataques",
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 18.sp,
-                modifier = Modifier.padding(bottom = 12.dp)
+                modifier = Modifier.padding(bottom = 12.dp),
+                fontFamily = silkFamily
             )
 
             movimientos.forEach { nombre ->
-                Column(Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 5.dp)) {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp)
+                ) {
                     Row(
                         Modifier
                             .fillMaxWidth()
@@ -383,14 +445,13 @@ fun MovimientosTab(movimientos: List<String>) {
                                 .size(8.dp)
                                 .background(Color.Gray, RoundedCornerShape(50.dp))
                         )
-
                         Spacer(Modifier.size(12.dp))
-
                         Text(
                             nombre.replace("-", " ").uppercase(),
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color.Black
+                            color = Color.Black,
+                            fontFamily = silkFamily
                         )
                     }
                     Spacer(

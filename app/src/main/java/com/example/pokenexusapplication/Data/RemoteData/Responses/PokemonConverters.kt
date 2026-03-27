@@ -41,12 +41,12 @@ class PokemonConverters {
     }
 
     @TypeConverter
-    fun fromString(value: String): List<String> {
+    fun fromMovesString(value: String): List<String> {
         return value.split(",").map { it.trim() }
     }
 
     @TypeConverter
-    fun fromList(list: List<String>): String {
+    fun fromMovesList(list: List<String>): String {
         return list.joinToString(",")
     }
 }

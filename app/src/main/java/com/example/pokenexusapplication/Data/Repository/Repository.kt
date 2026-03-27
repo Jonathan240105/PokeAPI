@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface Repository {
     suspend fun listarTodosPokemonsCompactos(): Flow<List<PokemonCompactoEntity>>
-    suspend fun traerPaginaPokemon(limite: Int, salto: Int): List<Pokemon>
+    suspend fun getPaginaPokemon(limite: Int, salto: Int): List<Pokemon>
     suspend fun getEvolucion(idEvolucion: Int?): Flow<List<EvolucionModel>>
     suspend fun getPokemonPorNombre(nombrePokemon: String): Flow<PokemonEntity?>
     suspend fun getEspecie(idEspecie: Int): Flow<EspecieEntity>

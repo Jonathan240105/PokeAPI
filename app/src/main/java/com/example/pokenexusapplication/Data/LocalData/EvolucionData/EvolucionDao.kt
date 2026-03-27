@@ -4,12 +4,13 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.pokenexusapplication.Data.LocalData.Querys
 
 @Dao
 interface EvolucionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertarEvoluciones(lista: List<EvolucionEntity>)
 
-    @Query("Select * from Evolucion where idCadena = :idCadenaEvolucion")
+    @Query(Querys.selectEvoluciones)
     suspend fun getEvoluciones(idCadenaEvolucion: Int): List<EvolucionEntity>
 }

@@ -8,4 +8,7 @@ object Querys {
 
     const val selectUnPokemon = "Select * from pokemon where nombre = :nombrePokemon limit 1"
     const val selectAllPokemon = "Select * from pokemon"
+    const val selectEspecie = "Select * from Especie where id = :idEspecie"
+    const val selectIdEvoluciones = "SELECT idEvoluciones FROM Especie WHERE id = :idPokemon"
+    const val selectEvoluciones = "Select * from Evolucion where idCadena = :idCadenaEvolucion"
 }

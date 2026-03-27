@@ -31,6 +31,9 @@ class RepositoryImp @Inject constructor(
     private val listDao: PokemonCompactoDao
 ) : Repository {
 
+    //Función que busca todos los pokemons compactos en la base de datos, en caso de no encontrarlo, hace la llamada a la api y lo busca.
+    //Una vez guardados emite un flow con la lista para que pueda ser estructurada y mostrada en la pantalla
+    //El endpoint lista los pokemon compactos, es decir, solo el nombre y la url
     override suspend fun listarTodosPokemonsCompactos(): Flow<List<PokemonCompactoEntity>> = flow {
 
         val numPokemonCargados = listDao.getCount()
@@ -52,7 +55,11 @@ class RepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun traerPaginaPokemon(limite: Int, salto: Int): List<Pokemon> {
+    //Función que busca un pokemon por su nombre, en caso de no encontrarlo, hace la llamada a la api y lo busca.
+    //El endpoint de esta llamada si devuelve el pokemon entero, por lo que utilizando los nombres de la llamada
+    // de listado de pokemons compactos, saco el detalle de cualquier pokemon.
+
+    override suspend fun getPaginaPokemon(limite: Int, salto: Int): List<Pokemon> {
         val Pokemonscompactos = listDao.getPokemonPagina(limite, salto)
 
         val listaFinal = mutableListOf<PokemonEntity>()
@@ -90,6 +97,8 @@ class RepositoryImp @Inject constructor(
         return listaFinal.map { EntityToPokemon(it) }
     }
 
+    //FUnción que busca las evoluciones de un pokemon en la abse de datos, en caso de no ecnontrarlo, hace la llamada a la api y los guarda en la base de datos.
+    //Una vez guardados, emite un flow que lleva la lista de evoluciones
     override suspend fun getEvolucion(idEvolucion: Int?): Flow<List<EvolucionModel>> = flow {
         var evolucionesLocales = evoDao.getEvoluciones(idEvolucion ?: 1)
 
@@ -111,6 +120,10 @@ class RepositoryImp @Inject constructor(
         println(evolucionesLocales)
         emit(EntityToEvolucion(evolucionesLocales))
     }
+
+    //Función que busca un pokemon por su nombre en la base de datos,
+    //en caso de no encontrarlo, hace la llamada a la api y lo busca.
+    // Una vez lo guarda, emite un flow con el pokemon.
 
     override suspend fun getPokemonPorNombre(nombrePokemon: String): Flow<PokemonEntity?> = flow {
         var PokemonEntero = pokedao.getPokemonByName(nombrePokemon)
@@ -143,6 +156,9 @@ class RepositoryImp @Inject constructor(
         emit(PokemonEntero)
     }
 
+    //Función que busca una especie por su id en la base de datos,
+    //en caso de no encontrarlo, hace la llamada a la api y lo busca.
+    //Una vez lo guarda, emite un flow con la especie.
     override suspend fun getEspecie(idEspecie: Int): Flow<EspecieEntity> = flow {
         var especie = especieDao.getEspeciePorId(idEspecie)
         if (especie == null) {
